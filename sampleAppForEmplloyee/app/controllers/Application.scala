@@ -10,14 +10,11 @@ import java.util.concurrent.TimeoutException
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
 class Application(dao: DAOComponent) extends Controller {
 
-//redirect to home
+// redirect to home
 
-  val Home = Redirect(routes.Application list(0, 2, ""))
-
-
+  val Home = Redirect(routes.Application.list(0, 2, ""))
   val employeeForm = Form(
     mapping(
       "id" -> optional(longNumber),
@@ -26,7 +23,6 @@ class Application(dao: DAOComponent) extends Controller {
       "dob" -> optional(date("MM/dd/yyyy")),
       "joiningDate" -> default(date("MM/dd/yyyy"), new java.util.Date),
       "designation" -> optional(text))(Employee.apply)(Employee.unapply))
-
 
   def index = Action { Home }
 

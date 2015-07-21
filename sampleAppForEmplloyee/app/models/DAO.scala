@@ -1,11 +1,10 @@
 package models
 
-import play.api.Play.current
-import play.api.db.DB
 import slick.driver.PostgresDriver.api._
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.db.DB
+import play.api.Play.current
 
 trait DAOComponent {
 
@@ -27,7 +26,6 @@ object DAO extends DAOComponent {
   private def filterQuery(id: Long): Query[Employees, Employee, Seq] =
     employees.filter(_.id === id)
 
-
   private def count(filter: String): Future[Int] =
     try db.run(employees.filter(_.name.toLowerCase like filter.toLowerCase()).length.result)
     finally db.close
@@ -35,7 +33,6 @@ object DAO extends DAOComponent {
   override def count: Future[Int] =
     try db.run(employees.length.result)
     finally db.close
-
 
   override def findById(id: Long): Future[Employee] =
     try db.run(filterQuery(id).result.head)
@@ -49,11 +46,12 @@ object DAO extends DAOComponent {
     try db.run(filterQuery(id).update(employee))
     finally db.close
 
+
   override def delete(id: Long): Future[Int] =
     try db.run(filterQuery(id).delete)
     finally db.close
 
- override def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Future[Page[Employee]] = {
+  override def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Future[Page[Employee]] = {
     try {
       val offset = pageSize * page
       val query =

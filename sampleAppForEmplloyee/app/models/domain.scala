@@ -1,17 +1,16 @@
 package models
 
+import java.sql.{Date => SqlDate}
 import java.util.Date
-import java.sql.{ Date => SqlDate }
-import play.api.Play.current
-import slick.lifted.Tag
-import java.sql.Timestamp
+
 import slick.driver.PostgresDriver.api._
+import slick.lifted.Tag
 
 case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
   lazy val prev = Option(page - 1).filter(_ >= 0)
   lazy val next = Option(page + 1).filter(_ => (offset + items.size) < total)
 }
-
+//table defination
 case class Employee(id: Option[Long], name: String, address: String, dob: Option[Date], joiningDate: Date, designation: Option[String])
 
 class Employees(tag: Tag) extends Table[Employee](tag, "EMPLOYEE") {
