@@ -24,58 +24,36 @@ object DAO extends DAOComponent {
 
   private def db: Database = Database.forDataSource(DB.getDataSource())
 
-  /**
-   * Filter employee with id
-   */
   private def filterQuery(id: Long): Query[Employees, Employee, Seq] =
     employees.filter(_.id === id)
 
-  /**
-   * Count employees with a filter
-   */
+
   private def count(filter: String): Future[Int] =
     try db.run(employees.filter(_.name.toLowerCase like filter.toLowerCase()).length.result)
     finally db.close
 
-  /**
-   * Count total employees in database
-   */
   override def count: Future[Int] =
     try db.run(employees.length.result)
     finally db.close
 
-  /**
-   * Find employee by id
-   */
+
   override def findById(id: Long): Future[Employee] =
     try db.run(filterQuery(id).result.head)
     finally db.close
 
-  /**
-   * Create a new employee
-   */
   override def insert(employee: Employee): Future[Int] =
     try db.run(employees += employee)
     finally db.close
 
-  /**
-   * Update employee with id
-   */
   override def update(id: Long, employee: Employee): Future[Int] =
     try db.run(filterQuery(id).update(employee))
     finally db.close
 
-  /**
-   * Delete employee with id
-   */
   override def delete(id: Long): Future[Int] =
     try db.run(filterQuery(id).delete)
     finally db.close
 
-  /**
-   * Return a page of employees
-   */
-  override def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Future[Page[Employee]] = {
+ override def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Future[Page[Employee]] = {
     try {
       val offset = pageSize * page
       val query =

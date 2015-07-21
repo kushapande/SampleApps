@@ -63,16 +63,10 @@ class Application(dao: DAOComponent) extends Controller {
       })
   }
 
-  /**
-   * Display the 'new employee form'.
-   */
   def create: Action[AnyContent] = Action { implicit request =>
     Ok(html.createForm(employeeForm))
   }
 
-  /**
-   * Handle the 'new employee form' submission.
-   */
   def save: Action[AnyContent] = Action.async { implicit request =>
     employeeForm.bindFromRequest.fold(
       formWithErrors => Future.successful(BadRequest(html.createForm(formWithErrors))),
