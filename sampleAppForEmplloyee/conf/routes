@@ -5,7 +5,6 @@
 # Home page
 GET    /                       controllers.Application.index
 
-# Employees list (look at the default values for pagination parameters)
 GET    /employees              controllers.Application.list(p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # Add employee
