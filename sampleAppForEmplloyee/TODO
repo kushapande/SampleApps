@@ -1,0 +1,19 @@
+{
+   "Status": "Success"/ Failure,
+   "Msg" : "",
+   "Data": {
+	   [
+	   ]
+		....
+          }
+}
+
+Endpoints to create
+1. List of employees
+2. Search by empid/firstname
+3. Add an employee / duplication
+4. Delete an employee
+5. Update some field in an employee record
+
+BONUS
+6. List of employees with number of rows 
