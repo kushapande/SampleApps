@@ -167,4 +167,20 @@ object Application extends Controller {
     }
   }
 
+ /* def listEmployeesByBounds(lower : Int, higher : Int) = Action {
+    val emp = EmployeeDao.list()
+    val empList = new ListBuffer[Employee]
+    val list = List
+
+    emp.map { x =>
+      x.map { y =>
+        empList += Employee(y._1, y._2, y._3, y._4, y._5, y._6)
+      }
+    }
+     list =  empList.toList.lift(0)
+
+
+      Ok(jsonResponse("Success", "List of project", Json.toJson()))
+  }*/
+
 }
