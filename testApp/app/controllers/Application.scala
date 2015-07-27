@@ -126,7 +126,7 @@ object Application extends Controller {
   }
 
   def updateDOB(id: Int) = Action.async(parse.json) { implicit request =>
-    val empDob = request.body \"dob"
+    val empDob = request.body \ "dob"
     val bDay = parseDate(empDob.toString())
     empDob.asOpt[String] match {
       case Some(date) if (!bDay.isEmpty) =>
@@ -136,10 +136,12 @@ object Application extends Controller {
         }
       case _ => Future {
         BadRequest(jsonResponse("Failure",
-          "Failed to update DOB of employee "+ id, Json.toJson("")))
+          "Failed to update DOB of employee " + id, Json.toJson("")))
       }
-
     }
+  }
+
+
 
     def updateDesignation(id: Int) = Action.async(parse.json) { implicit request =>
       val designation = request.body \"designation"
@@ -164,21 +166,5 @@ object Application extends Controller {
         s"${n} rows deleted", Json.toJson(Json.obj("numOfRows" -> n))))
     }
   }
-/*
-  def listEmployeesByBounds(lower : Int, higher : Int) = Action.async { implicit request =>
-
-
-    val emp = EmployeeDao.list()
-    val empList = new ListBuffer[Employee]
-
-    emp.map { x =>
-      x.map { y =>
-        empList += Employee(y._1, y._2, y._3, y._4, y._5, y._6)
-      }
-
-      Ok(jsonResponse("Success", "List of project", Json.toJson(empList.toList.range(lower,higher))))
-    }
-  }*/
-
 
 }
