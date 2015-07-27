@@ -11,13 +11,13 @@ POST    /                                            controllers.Application.add
 GET     /employees                                   controllers.Application.listEmployees
 
 
-GET /employees/:id                                   controllers.Application.getEmployee(id : Int)
+GET /employees/:id                                controllers.Application.getEmployee(id : Int)
 
-PUT    /employees/:id/designation/:designation        controllers.Application.updateDesignation(id : Int,designation : String)
+PUT    /employees/:id/designation               controllers.Application.updateDesignation(id : Int)
 
-PUT    /employees/:id/dob/:dob                         controllers.Application.updateDOB(id : Int,dob : String)
+PUT    /employees/:id/dob                       controllers.Application.updateDOB(id : Int)
 
-PUT    /employees/:id/address/:address                     controllers.Application.updateAddress(id : Int,address : String)
+PUT    /employees/:id/address                     controllers.Application.updateAddress(id : Int)
 
 DELETE /employees/:id                             controllers.Application.deleteEmployeeRecord(id : Int)
 

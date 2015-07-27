@@ -110,35 +110,61 @@ object Application extends Controller {
     }
   }
 
-  def updateAddress(id: Int, address: String) = Action.async { implicit request =>
-    val numfRows = EmployeeDao.upDateEmployeeAddress(id, address)
-    numfRows.map { n =>
-      Ok(jsonResponse("Sucess", s"${n} rows updated", Json.toJson(Json.obj("numOfRows" -> n))))
+  def updateAddress(id: Int) = Action.async(parse.json) { implicit request =>
+    val address = request.body \"address"
+    address.asOpt[String] match {
+      case Some(empAddr) if (!empAddr.isEmpty) =>
+        val numfRows = EmployeeDao.upDateEmployeeAddress(id, empAddr)
+        numfRows.map { n =>
+          Ok(jsonResponse("Sucess", s"${n} rows updated", Json.toJson(Json.obj("numOfRows" -> n))))
+        }
+      case _ => Future {
+        BadRequest(jsonResponse("Failure",
+          "Failed to update address of employee  "+ id, Json.toJson("")))
+      }
     }
   }
 
-  def updateDOB(id: Int, dob: String) = Action.async { implicit request =>
-    val numfRows = EmployeeDao.upDateEmployeeDOB(id, dob)
-    numfRows.map { n =>
-      Ok(jsonResponse("Sucess", s"${n} rows updated", Json.toJson(Json.obj("numOfRows" -> n))))
-    }
-  }
+  def updateDOB(id: Int) = Action.async(parse.json) { implicit request =>
+    val empDob = request.body \"dob"
+    val bDay = parseDate(empDob.toString())
+    empDob.asOpt[String] match {
+      case Some(date) if (!bDay.isEmpty) =>
+        val numfRows = EmployeeDao.upDateEmployeeDOB(id, bDay)
+        numfRows.map { n =>
+          Ok(jsonResponse("Sucess", s"${n} rows updated", Json.toJson(Json.obj("numOfRows" -> n))))
+        }
+      case _ => Future {
+        BadRequest(jsonResponse("Failure",
+          "Failed to update DOB of employee "+ id, Json.toJson("")))
+      }
 
-  def updateDesignation(id: Int, designation: String) = Action.async { implicit request =>
-    val numfRows = EmployeeDao.upDateEmployeeDesignation(id, designation)
-    numfRows.map { n =>
-      Ok(jsonResponse("Sucess", s"${n} rows updated", Json.toJson(Json.obj("numOfRows" -> n))))
     }
-  }
 
-  def deleteEmployeeRecord(id: Int) = Action.async { implicit request =>
+    def updateDesignation(id: Int) = Action.async(parse.json) { implicit request =>
+      val designation = request.body \"designation"
+      designation.asOpt[String] match {
+        case Some(empDesignation) if (!empDesignation.isEmpty) =>
+          val numfRows = EmployeeDao.upDateEmployeeAddress(id, empDesignation)
+          numfRows.map { n =>
+            Ok(jsonResponse("Sucess", s"${n} rows updated", Json.toJson(Json.obj("numOfRows" -> n))))
+          }
+        case _ => Future {
+          BadRequest(jsonResponse("Failure",
+            "Failed to update designation of employee  "+ id, Json.toJson("")))
+        }
+      }
+    }
+
+
+    def deleteEmployeeRecord(id: Int) = Action.async { implicit request =>
     val numOfRows = EmployeeDao.deleteAnEmployee(id)
     numOfRows.map { n =>
       Ok(jsonResponse("Success",
         s"${n} rows deleted", Json.toJson(Json.obj("numOfRows" -> n))))
     }
   }
-
+/*
   def listEmployeesByBounds(lower : Int, higher : Int) = Action.async { implicit request =>
 
 
@@ -152,7 +178,7 @@ object Application extends Controller {
 
       Ok(jsonResponse("Success", "List of project", Json.toJson(empList.toList.range(lower,higher))))
     }
-  }
+  }*/
 
 
 }
