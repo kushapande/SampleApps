@@ -10,9 +10,9 @@ POST    /                                            controllers.Application.add
 
 GET     /employees                                   controllers.Application.listEmployees
 
-GET    /employees/range               controllers.Application.getEmployeeList()
+GET    /employees/range                           controllers.Application.getRangedEmployees()
 
-GET /employees/:id                                controllers.Application.getEmployee(id : Int)
+GET    /employees/:id                                controllers.Application.getEmployee(id : Int)
 
 PUT    /employees/:id/designation               controllers.Application.updateDesignation(id : Int)
 

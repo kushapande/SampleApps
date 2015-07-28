@@ -54,8 +54,6 @@ object Application extends Controller {
 
     val empDoj = parseDate(doj.toString())
     val empDob = parseDate(dob.toString())
-    println("doj " + empDoj)
-    println("dob " + empDob)
 
     name.asOpt[String] match {
       case Some(empName) if (!empName.isEmpty && !empDoj.isEmpty && employeeSet.add(empName.toLowerCase)) =>
@@ -81,6 +79,10 @@ object Application extends Controller {
     else
       ""
   }
+
+  /*
+  * gets all employees details
+  * */
   //GET
   def listEmployees = Action.async { implicit request =>
 
@@ -94,13 +96,16 @@ object Application extends Controller {
       Ok(jsonResponse("Success", "List of project", Json.toJson(empList.toList)))
     }
   }
+  /*
+  * gets the list as per the range specified in query parameters
+  * */
 
-  def getEmployeeList() = Action.async{ implicit  request =>
+  def getRangedEmployees() = Action.async{ implicit  request =>
     val from = request.getQueryString("from")
     val to = request.getQueryString("to")
     val lower = from.get
     val higher = to.get
-    val list = EmployeeDao.paginate(lower.toInt,higher.toInt )
+    val list = EmployeeDao.rangedList(lower.toInt,higher.toInt )
     val empList = new ListBuffer[Employee]
 
     list.map { x =>
@@ -110,6 +115,10 @@ object Application extends Controller {
       Ok(jsonResponse("Success", "List of project", Json.toJson(empList.toList)))
     }
   }
+
+  /*
+  * all gets one employee
+  * */
 
   def getEmployee(id: Int) = Action.async { implicit request =>
 
@@ -125,6 +134,10 @@ object Application extends Controller {
     }
   }
 
+
+  /*
+  * updates the address
+  * */
   def updateAddress(id: Int) = Action.async(parse.json) { implicit request =>
     val address = request.body \"address"
     address.asOpt[String] match {
@@ -139,7 +152,9 @@ object Application extends Controller {
       }
     }
   }
-
+  /*
+    * updates the date of birth
+    * */
   def updateDOB(id: Int) = Action.async(parse.json) { implicit request =>
     val empDob = request.body \ "dob"
     val bDay = parseDate(empDob.toString())
@@ -156,7 +171,9 @@ object Application extends Controller {
     }
   }
 
-
+  /*
+    * updates the designation
+    * */
 
     def updateDesignation(id: Int) = Action.async(parse.json) { implicit request =>
       val designation = request.body \"designation"
@@ -173,7 +190,9 @@ object Application extends Controller {
       }
     }
 
-
+    /*
+     *deletes the employee from the records
+      *  */
     def deleteEmployeeRecord(id: Int) = Action.async { implicit request =>
     val numOfRows = EmployeeDao.deleteAnEmployee(id)
     numOfRows.map { n =>

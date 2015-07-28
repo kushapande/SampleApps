@@ -37,7 +37,7 @@ object EmployeeDao {
   }
 
 
-  def paginate(lower: Int,higher :Int) = {
+  def rangedList(lower: Int,higher :Int) = {
     val q = employees.filter( x => x.id > lower -1 ).filter(x => x.id < higher).map{ x => (x.id,x.name,x.address, x.dob,x.doj,x.designation)}
     val action = q.result
     try db.run(action)
