@@ -95,8 +95,12 @@ object Application extends Controller {
     }
   }
 
-  def getEmployeeList(lower: Int, higher: Int) = Action.async{ implicit  request =>
-    val list = EmployeeDao.paginate(lower,higher )
+  def getEmployeeList() = Action.async{ implicit  request =>
+    val from = request.getQueryString("from")
+    val to = request.getQueryString("to")
+    val lower = from.get
+    val higher = to.get
+    val list = EmployeeDao.paginate(lower.toInt,higher.toInt )
     val empList = new ListBuffer[Employee]
 
     list.map { x =>

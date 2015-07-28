@@ -10,7 +10,7 @@ POST    /                                            controllers.Application.add
 
 GET     /employees                                   controllers.Application.listEmployees
 
-GET    /employees/range/:lower/:higher                controllers.Application.getEmployeeList(lower:Int, higher: Int)
+GET    /employees/range               controllers.Application.getEmployeeList()
 
 GET /employees/:id                                controllers.Application.getEmployee(id : Int)
 
