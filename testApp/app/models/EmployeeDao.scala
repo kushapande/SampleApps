@@ -36,17 +36,18 @@ object EmployeeDao {
 
   }
 
-/*  def listByBounds(lower :Int, upper: Int) = {
-    val list = new ListBuffer[Employee]
-    var a = lower
-    for(a  <- lower+1 until upper){
-      list += empList(a)
-    }
 
-  }*/
+  def paginate(lower: Int,higher :Int) = {
+    val q = employees.filter( x => x.id > lower -1 ).filter(x => x.id < higher).map{ x => (x.id,x.name,x.address, x.dob,x.doj,x.designation)}
+    val action = q.result
+    try db.run(action)
+    catch {
+      case ex: Throwable => throw new SlickException(ex.getMessage)
+    }
+  }
 
   def filterByEmpId(id: Int) = {
-   val q = employees.filter( x => x.id=== id).map{ x => (x.id,x.name,x.address, x.dob,x.doj,x.designation)}
+   val q = employees.filter( x => x.id === id).map{ x => (x.id,x.name,x.address, x.dob,x.doj,x.designation)}
     val action = q.result
     try db.run(action)
     catch {
@@ -92,15 +93,4 @@ object EmployeeDao {
       case ex: Throwable => throw new SlickException(ex.getMessage)
     }
   }
-
-/*
-  def paginateandFetchInNumbers (num : Int) ={
-    import play.api.libs.concurrent.Execution.Implicits.defaultContext
-    val input: Enumerator[Employee] = Streams.publisherToEnumerator(db.stream(employees.result))
-    val slider: Enumeratee[Employee, List[Employee]] = Enumeratee.grouped[Employee](Iteratee.takeUpTo[Employee](num).map(_.toList))
-    input.through(slider)
-  }
-*/
-
-
 }

@@ -84,14 +84,25 @@ object Application extends Controller {
   //GET
   def listEmployees = Action.async { implicit request =>
 
-    val emp = EmployeeDao.list()
+    val list = EmployeeDao.list()
     val empList = new ListBuffer[Employee]
 
-    emp.map { x =>
+    list.map { x =>
       x.map { y =>
         empList += Employee(y._1, y._2, y._3, y._4, y._5, y._6)
       }
+      Ok(jsonResponse("Success", "List of project", Json.toJson(empList.toList)))
+    }
+  }
 
+  def getEmployeeList(lower: Int, higher: Int) = Action.async{ implicit  request =>
+    val list = EmployeeDao.paginate(lower,higher )
+    val empList = new ListBuffer[Employee]
+
+    list.map { x =>
+      x.map { y =>
+        empList += Employee(y._1, y._2, y._3, y._4, y._5, y._6)
+      }
       Ok(jsonResponse("Success", "List of project", Json.toJson(empList.toList)))
     }
   }
@@ -167,20 +178,6 @@ object Application extends Controller {
     }
   }
 
- /* def listEmployeesByBounds(lower : Int, higher : Int) = Action {
-    val emp = EmployeeDao.list()
-    val empList = new ListBuffer[Employee]
-    val list = List
 
-    emp.map { x =>
-      x.map { y =>
-        empList += Employee(y._1, y._2, y._3, y._4, y._5, y._6)
-      }
-    }
-     list =  empList.toList.lift(0)
-
-
-      Ok(jsonResponse("Success", "List of project", Json.toJson()))
-  }*/
 
 }
